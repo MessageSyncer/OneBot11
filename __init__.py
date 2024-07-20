@@ -19,10 +19,10 @@ class OneBot11InstanceConfig(PusherInstanceConfig):
     image_send_method: str = 'url'  # [url, base64, file]
     url: str = ''
     token: str = None  # None means auth is not needed
-    contact: list[Contacter] = field(default_factory=lambda: [])
+    contact: dict[str, Contacter] = field(default_factory=lambda: {})
 
 
-class OneBot11(Pusher[PusherConfig, PusherInstanceConfig]):
+class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
     async def push(self, content: Struct, to: str):
         message_field = []
 

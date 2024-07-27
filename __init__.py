@@ -80,8 +80,8 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
         response = requests.post(url, json=json_, headers=headers)
 
         if not response.ok:
-            raise Exception()
+            raise Exception(response.text)
 
         response = response.json()
         if response.get('status') == 'failed':
-            raise Exception()
+            raise Exception(response)

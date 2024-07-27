@@ -26,14 +26,14 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
     async def push(self, content: Struct, to: str):
         message_field = []
 
-        for element in content.content:
+        for i, element in enumerate(content.content):
             type_ = type(element)
             if type_ == StructText:
                 message_field.append(
                     {
                         "type": "text",
                         "data": {
-                            "text": element.text
+                            "text": (element.text + '\n') if i != len(content.content) - 1 else element.text
                         }
                     }
                 )

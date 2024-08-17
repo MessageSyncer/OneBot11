@@ -33,7 +33,7 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
                     {
                         "type": "text",
                         "data": {
-                            "text": (element.text + '\n') if i != len(content.content) - 1 else element.text
+                            "text": element.text
                         }
                     }
                 )

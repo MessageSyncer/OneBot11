@@ -29,6 +29,16 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
         for i, element in enumerate(content.content):
             type_ = type(element)
             if type_ == StructText:
+                if len(message_field) != 0:
+                    if message_field[-1]['type'] == 'image': # 手机端QQ会吃掉紧随图片后的文本块的一个换行，所以多加一个换行给它吃
+                        message_field.append(
+                            {
+                                "type": "text",
+                                "data": {
+                                    "text": '\n'
+                                }
+                            }
+                        )
                 message_field.append(
                     {
                         "type": "text",

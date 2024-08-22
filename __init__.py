@@ -20,17 +20,27 @@ class OneBot11InstanceConfig(PusherInstanceConfig):
     url: str = ''
     token: str = None  # None means auth is not needed
     contact: dict[str, Contacter] = field(default_factory=lambda: {})
+    max_image_count: int = 15
 
 
 class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
     async def push(self, content: Struct, to: str):
         message_field = []
 
+        images = [element for element in content.content if type(element) == StructImage]
+        for i, image_ in enumerate(images):
+            if i+1 > self.instance_config.max_image_count:
+                if i+1 == self.instance_config.max_image_count+1:
+                    index = content.content.index(image_)
+                    content.content[index] = StructText(f'（等{len(images)}张图片）\n')
+                else:
+                    content.content.remove(image_)
+
         for i, element in enumerate(content.content):
             type_ = type(element)
             if type_ == StructText:
                 if len(message_field) != 0:
-                    if message_field[-1]['type'] == 'image': # 手机端QQ会吃掉紧随图片后的文本块的一个换行，所以多加一个换行给它吃
+                    if message_field[-1]['type'] == 'image':  # 手机端QQ会吃掉紧随图片后的文本块的一个换行，所以多加一个换行给它吃
                         message_field.append(
                             {
                                 "type": "text",

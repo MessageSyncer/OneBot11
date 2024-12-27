@@ -59,7 +59,7 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
                 )
             elif type_ == StructImage:
                 imageurl = ''
-                image_send_method = self.instance_config.get('image_send_method', 'url')
+                image_send_method = self.instance_config.image_send_method
                 if image_send_method == 'base64':
                     imageurl = 'base64://' + image.image_to_base64(element.source)
                 elif image_send_method == 'url':
@@ -75,9 +75,9 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
                     }
                 )
 
-        to = self.instance_config['contact'][to]
+        to = self.instance_config.contact[to]
         private = to['private']
-        url = self.instance_config['url']
+        url = self.instance_config.url
 
         if private:
             json_ = {
@@ -94,7 +94,7 @@ class OneBot11(Pusher[OneBot11Config, OneBot11InstanceConfig]):
         headers = {
             'Content-Type': 'application/json'
         }
-        if token := self.instance_config.get('token', None):
+        if token := self.instance_config.token:
             headers['Authorization'] = f'Bearer {token}'
 
         response = requests.post(url, json=json_, headers=headers)
